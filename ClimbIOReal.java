@@ -19,6 +19,7 @@ import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.AdjustableValues;
 import frc.robot.Constants;
+import org.littletonrobotics.junction.Logger;
 
 public class ClimbIOReal implements ClimbIO {
     private SparkMax motor;
@@ -46,12 +47,35 @@ public class ClimbIOReal implements ClimbIO {
     }
 
     public void updateInputs() {
+        if (AdjustableValues.hasChanged("Climb_kP")) {
+            SparkMaxConfig pidConfig = new SparkMaxConfig();
+            pidConfig.closedLoop.p(AdjustableValues.getNumber("Climb_kP"));
+
+            motor.configure(pidConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        }
+
+        if (AdjustableValues.hasChanged("Climb_kI")) {
+            SparkMaxConfig pidConfig = new SparkMaxConfig();
+            pidConfig.closedLoop.i(AdjustableValues.getNumber("Climb_kI"));
+
+            motor.configure(pidConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        }
+
+        if (AdjustableValues.hasChanged("Climb_kD")) {
+            SparkMaxConfig pidConfig = new SparkMaxConfig();
+            pidConfig.closedLoop.d(AdjustableValues.getNumber("Climb_kD"));
+
+            motor.configure(pidConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        }
+
         inputs.angle = getAngle();
         inputs.velocity = getVelocity();
         inputs.acceleration = getAcceleration();
         inputs.voltage = getVoltage();
         inputs.current = getCurrent();
         inputs.temperature = getTemperature();
+
+        Logger.processInputs("/RealOutputs/Subsystems/Climb/ClimbIOReal", inputs);
     }
 
     public void setAngle(Angle angle) {
