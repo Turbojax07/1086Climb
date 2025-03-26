@@ -33,7 +33,7 @@ public class ClimbIOReal implements ClimbIO {
 
         SparkMaxConfig config = new SparkMaxConfig();
         config.idleMode(IdleMode.kBrake);
-        config.inverted(false);
+        config.inverted(true);
         config.smartCurrentLimit((int) Constants.ClimbConstants.currentLimit.in(Amps));
         config.closedLoop.p(AdjustableValues.getNumber("Climb_kP"));
         config.closedLoop.i(AdjustableValues.getNumber("Climb_kI"));
