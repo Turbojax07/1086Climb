@@ -2,6 +2,12 @@ package frc.robot.subsystems.climb;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -19,53 +25,53 @@ import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.AdjustableValues;
 import frc.robot.Constants;
+import frc.robot.Constants.ClimbConstants;
+
 import org.littletonrobotics.junction.Logger;
 
 public class ClimbIOReal implements ClimbIO {
-    private SparkMax motor;
-    private RelativeEncoder encoder;
-    private SparkClosedLoopController controller;
+    private TalonFX motor;
 
     private ClimbIOInputsAutoLogged inputs;
 
     public ClimbIOReal(int motorId) {
-        motor = new SparkMax(motorId, MotorType.kBrushless);
+        motor = new TalonFX(motorId);
 
-        SparkMaxConfig config = new SparkMaxConfig();
-        config.idleMode(IdleMode.kBrake);
-        config.inverted(true);
-        config.smartCurrentLimit((int) Constants.ClimbConstants.currentLimit.in(Amps));
-        config.closedLoop.p(AdjustableValues.getNumber("Climb_kP"));
-        config.closedLoop.i(AdjustableValues.getNumber("Climb_kI"));
-        config.closedLoop.d(AdjustableValues.getNumber("Climb_kD"));
-        config.encoder.positionConversionFactor(Constants.ClimbConstants.positionConversionFactor);
-        config.encoder.velocityConversionFactor(Constants.ClimbConstants.velocityConversionFactor);
+        TalonFXConfiguration config = new TalonFXConfiguration();
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.CurrentLimits.StatorCurrentLimit = ClimbConstants.currentLimit.in(Amps);
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        config.Slot0.kP = AdjustableValues.getNumber("Climb_kP");
+        config.Slot0.kI = AdjustableValues.getNumber("Climb_kI");
+        config.Slot0.kD = AdjustableValues.getNumber("Climb_kD");
+        config.Feedback.SensorToMechanismRatio = ClimbConstants.gearRatio;
 
-        motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        motor.getConfigurator().apply(config);
 
         inputs = new ClimbIOInputsAutoLogged();
     }
 
     public void updateInputs() {
         if (AdjustableValues.hasChanged("Climb_kP")) {
-            SparkMaxConfig pidConfig = new SparkMaxConfig();
-            pidConfig.closedLoop.p(AdjustableValues.getNumber("Climb_kP"));
+            Slot0Configs config = new Slot0Configs();
+            config.kP = AdjustableValues.getNumber("Climb_kP");
 
-            motor.configure(pidConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+            motor.getConfigurator().apply(config);
         }
 
         if (AdjustableValues.hasChanged("Climb_kI")) {
-            SparkMaxConfig pidConfig = new SparkMaxConfig();
-            pidConfig.closedLoop.i(AdjustableValues.getNumber("Climb_kI"));
+            Slot0Configs config = new Slot0Configs();
+            config.kI = AdjustableValues.getNumber("Climb_kI");
 
-            motor.configure(pidConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+            motor.getConfigurator().apply(config);
         }
 
         if (AdjustableValues.hasChanged("Climb_kD")) {
-            SparkMaxConfig pidConfig = new SparkMaxConfig();
-            pidConfig.closedLoop.d(AdjustableValues.getNumber("Climb_kD"));
+            Slot0Configs config = new Slot0Configs();
+            config.kD = AdjustableValues.getNumber("Climb_kD");
 
-            motor.configure(pidConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+            motor.getConfigurator().apply(config);
         }
 
         inputs.angle = getAngle();
@@ -79,31 +85,30 @@ public class ClimbIOReal implements ClimbIO {
     }
 
     public void setAngle(Angle angle) {
-        controller.setReference(angle.in(Radians), ControlType.kPosition);
+        motor.setControl(new PositionVoltage(angle));
     }
 
     public Angle getAngle() {
-        return Radians.of(encoder.getPosition());
+        return motor.getPosition().getValue();
     }
 
     public AngularVelocity getVelocity() {
-        return RadiansPerSecond.of(encoder.getVelocity());
+        return motor.getVelocity().getValue();
     }
 
     public AngularAcceleration getAcceleration() {
-        return RadiansPerSecondPerSecond.of(encoder.getVelocity() / 0.02);
+        return motor.getAcceleration().getValue();
     }
 
     public Voltage getVoltage() {
-        return Volts.of(motor.getAppliedOutput() * motor.getBusVoltage());
+        return motor.getMotorVoltage().getValue();
     }
 
     public Current getCurrent() {
-        return Amps.of(motor.getOutputCurrent());
+        return motor.getStatorCurrent().getValue();
     }
 
     public Temperature getTemperature() {
-        return Celsius.of(motor.getMotorTemperature());
+        return motor.getDeviceTemp().getValue();
     }
-
 }
