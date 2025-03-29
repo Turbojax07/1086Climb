@@ -13,7 +13,6 @@ import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.AdjustableValues;
-import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
 public class ClimbIOSim implements ClimbIO {
@@ -26,8 +25,8 @@ public class ClimbIOSim implements ClimbIO {
         motor = new DCMotorSim(
             LinearSystemId.createDCMotorSystem(
                 DCMotor.getNEO(1),
-                Constants.ClimbConstants.moi.magnitude(),
-                Constants.ClimbConstants.gearRatio),
+                ClimbConstants.moi.magnitude(),
+                ClimbConstants.gearRatio),
             DCMotor.getNEO(1));
 
         controller = new PIDController(
