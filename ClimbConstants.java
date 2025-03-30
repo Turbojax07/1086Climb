@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Radians;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
@@ -34,7 +35,7 @@ public class ClimbConstants {
     public static final double kIDefault = 0;
     public static final double kDDefault = 0;
 
-    public static final Angle extended = Degrees.of(260);
-    public static final Angle stow = Degrees.of(0);
-    public static final Angle tucked = Degrees.of(180);
+    public static final Angle extended = Radians.of(1.1152);
+    public static final Angle stow = Radians.of(0);
+    public static final Angle tucked = Radians.of(2.359);
 }
