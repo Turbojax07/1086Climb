@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -75,6 +76,10 @@ public class ClimbIOReal implements ClimbIO {
 
     public void setAngle(Angle angle) {
         motor.setControl(new PositionVoltage(angle));
+    }
+
+    public void setVolts(Voltage volts) {
+        motor.setControl(new VoltageOut(volts));
     }
 
     public Angle getAngle() {

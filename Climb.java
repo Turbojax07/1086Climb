@@ -55,4 +55,8 @@ public class Climb extends SubsystemBase {
     public Temperature getTemperature() {
         return climbIO.getTemperature();
     }
+
+    public void setVolts(Voltage volts) {
+        climbIO.setVolts(volts);
+    }
 }

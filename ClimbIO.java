@@ -36,6 +36,8 @@ public interface ClimbIO {
      */
     public void setAngle(Angle angle);
 
+    public void setVolts(Voltage volts);
+
     /** Gets the angle of the module as an {@link Angle}. */
     public Angle getAngle();
 

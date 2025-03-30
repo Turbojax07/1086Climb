@@ -58,6 +58,11 @@ public class ClimbIOSim implements ClimbIO {
         Logger.processInputs("/RealOutputs/Subsystems/Climb/ClimbIOSim", inputs);
     }
 
+    @Override
+    public void setVolts(Voltage volts) {
+        motor.setInputVoltage(volts.in(Volts));
+    }
+
     public void setAngle(Angle angle) {
         controller.setSetpoint(angle.in(Radians));
     }
