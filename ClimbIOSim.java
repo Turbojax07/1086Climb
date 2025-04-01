@@ -12,7 +12,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import frc.robot.util.AdjustableValues;
+import frc.robot.subsystems.util.AdjustableValues;
 import org.littletonrobotics.junction.Logger;
 
 public class ClimbIOSim implements ClimbIO {

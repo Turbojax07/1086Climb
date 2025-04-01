@@ -15,7 +15,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
-import frc.robot.util.AdjustableValues;
+import frc.robot.subsystems.util.AdjustableValues;
 import org.littletonrobotics.junction.Logger;
 
 public class ClimbIOReal implements ClimbIO {
