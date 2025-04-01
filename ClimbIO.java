@@ -44,7 +44,10 @@ public interface ClimbIO {
     /** Gets the angular velocity of the module as an {@link AngularVelocity}. */
     public AngularVelocity getVelocity();
 
-    /** Gets the angular acceleration of the module as an {@link AngularAcceleration}. */
+    /**
+     * Gets the angular acceleration of the module as an
+     * {@link AngularAcceleration}.
+     */
     public AngularAcceleration getAcceleration();
 
     /** Gets the output volts as a {@link Voltage}. */

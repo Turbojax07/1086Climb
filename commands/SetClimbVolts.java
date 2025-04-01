@@ -23,7 +23,8 @@ public class SetClimbVolts extends Command {
     }
 
     @Override
-    public void execute() {}
+    public void execute() {
+    }
 
     @Override
     public boolean isFinished() {

@@ -15,8 +15,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
-import frc.robot.subsystems.util.AdjustableValues;
-
+import frc.robot.util.AdjustableValues;
 import org.littletonrobotics.junction.Logger;
 
 public class ClimbIOReal implements ClimbIO {
@@ -42,6 +41,7 @@ public class ClimbIOReal implements ClimbIO {
         inputs = new ClimbIOInputsAutoLogged();
     }
 
+    @Override
     public void updateInputs() {
         if (AdjustableValues.hasChanged("Climb_kP")) {
             Slot0Configs config = new Slot0Configs();
@@ -74,34 +74,42 @@ public class ClimbIOReal implements ClimbIO {
         Logger.processInputs("/RealOutputs/Subsystems/Climb/ClimbIOReal", inputs);
     }
 
+    @Override
     public void setAngle(Angle angle) {
         motor.setControl(new PositionVoltage(angle));
     }
 
+    @Override
     public void setVolts(Voltage volts) {
         motor.setControl(new VoltageOut(volts));
     }
 
+    @Override
     public Angle getAngle() {
         return motor.getPosition().getValue();
     }
 
+    @Override
     public AngularVelocity getVelocity() {
         return motor.getVelocity().getValue();
     }
 
+    @Override
     public AngularAcceleration getAcceleration() {
         return motor.getAcceleration().getValue();
     }
 
+    @Override
     public Voltage getVoltage() {
         return motor.getMotorVoltage().getValue();
     }
 
+    @Override
     public Current getCurrent() {
         return motor.getStatorCurrent().getValue();
     }
 
+    @Override
     public Temperature getTemperature() {
         return motor.getDeviceTemp().getValue();
     }

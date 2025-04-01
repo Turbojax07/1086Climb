@@ -12,8 +12,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import frc.robot.subsystems.util.AdjustableValues;
-
+import frc.robot.util.AdjustableValues;
 import org.littletonrobotics.junction.Logger;
 
 public class ClimbIOSim implements ClimbIO {
@@ -24,20 +23,21 @@ public class ClimbIOSim implements ClimbIO {
 
     public ClimbIOSim() {
         motor = new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(
-                DCMotor.getNEO(1),
-                ClimbConstants.moi.magnitude(),
-                ClimbConstants.gearRatio),
-            DCMotor.getNEO(1));
+                LinearSystemId.createDCMotorSystem(
+                        DCMotor.getNEO(1),
+                        ClimbConstants.moi.magnitude(),
+                        ClimbConstants.gearRatio),
+                DCMotor.getNEO(1));
 
         controller = new PIDController(
-            AdjustableValues.getNumber("Climb_kP"),
-            AdjustableValues.getNumber("Climb_kI"),
-            AdjustableValues.getNumber("Climb_kD"));
+                AdjustableValues.getNumber("Climb_kP"),
+                AdjustableValues.getNumber("Climb_kI"),
+                AdjustableValues.getNumber("Climb_kD"));
 
         inputs = new ClimbIOInputsAutoLogged();
     }
 
+    @Override
     public void updateInputs() {
         if (AdjustableValues.hasChanged("Climb_kP")) controller.setP(AdjustableValues.getNumber("Climb_kP"));
         if (AdjustableValues.hasChanged("Climb_kI")) controller.setI(AdjustableValues.getNumber("Climb_kI"));
@@ -63,30 +63,37 @@ public class ClimbIOSim implements ClimbIO {
         motor.setInputVoltage(volts.in(Volts));
     }
 
+    @Override
     public void setAngle(Angle angle) {
         controller.setSetpoint(angle.in(Radians));
     }
 
+    @Override
     public Angle getAngle() {
         return motor.getAngularPosition();
     }
 
+    @Override
     public AngularVelocity getVelocity() {
         return motor.getAngularVelocity();
     }
 
+    @Override
     public AngularAcceleration getAcceleration() {
         return motor.getAngularAcceleration();
     }
 
+    @Override
     public Voltage getVoltage() {
         return Volts.of(motor.getInputVoltage());
     }
 
+    @Override
     public Current getCurrent() {
         return Amps.of(motor.getCurrentDrawAmps());
     }
 
+    @Override
     public Temperature getTemperature() {
         return Celsius.zero();
     }
