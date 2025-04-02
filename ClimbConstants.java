@@ -25,7 +25,12 @@ public class ClimbConstants {
     public static final double kIDefault = 0;
     public static final double kDDefault = 0;
 
-    public static final Angle extended = Radians.of(1.1152);
-    public static final Angle stow = Radians.of(0);
-    public static final Angle tucked = Radians.of(2.359);
+    public static final Angle minAngle = Radians.of(0);
+    public static final Angle maxAngle = Radians.of(1.2);
+
+    public class ClimbPositions {
+        public static final Angle STOW = Radians.of(0);
+        public static final Angle GRAB = Radians.of(1.1152);
+        public static final Angle HANG = Radians.of(2.359);
+    }
 }
