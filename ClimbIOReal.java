@@ -20,7 +20,6 @@ import org.littletonrobotics.junction.Logger;
 
 public class ClimbIOReal implements ClimbIO {
     private TalonFX motor;
-
     private ClimbIOInputsAutoLogged inputs;
 
     public ClimbIOReal(int motorId) {
@@ -76,7 +75,7 @@ public class ClimbIOReal implements ClimbIO {
         inputs.current = getCurrent();
         inputs.temperature = getTemperature();
 
-        Logger.processInputs("/RealOutputs/Subsystems/Climb/ClimbIOReal", inputs);
+        Logger.processInputs("/RealOutputs/Climb/ClimbIOReal", inputs);
     }
 
     @Override

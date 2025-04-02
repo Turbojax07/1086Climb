@@ -22,20 +22,13 @@ public interface ClimbIO {
         Temperature temperature = Celsius.zero();
     }
 
-    /**
-     * Updates a set of IO inputs with current values.
-     * 
-     * @param inputs The inputs to update.
-     */
+    /** Updates a set of IO inputs with current values. */
     public void updateInputs();
 
-    /**
-     * Sets the angle of the climb motor.
-     * 
-     * @param angle The new angle of the subsystem.
-     */
+    /** Sets the desired angle of the climb motor. */
     public void setAngle(Angle angle);
 
+    /** Sets the voltage output of the climb motor. */
     public void setVolts(Voltage volts);
 
     /** Gets the angle of the module as an {@link Angle}. */
@@ -44,10 +37,7 @@ public interface ClimbIO {
     /** Gets the angular velocity of the module as an {@link AngularVelocity}. */
     public AngularVelocity getVelocity();
 
-    /**
-     * Gets the angular acceleration of the module as an
-     * {@link AngularAcceleration}.
-     */
+    /** Gets the angular acceleration of the module as an {@link AngularAcceleration}. */
     public AngularAcceleration getAcceleration();
 
     /** Gets the output volts as a {@link Voltage}. */
