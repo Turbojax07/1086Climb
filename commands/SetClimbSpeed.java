@@ -16,7 +16,7 @@ public class SetClimbSpeed extends Command {
 
     /**
      * Creates a new {@link SetClimbSpeed} command.
-     * It sets the voltage of the {@link Climb} system.
+     * It sets the voltage of the climb system.
      * 
      * @param climb The {@link Climb} system to control.
      * @param throttle The percent output to run at.

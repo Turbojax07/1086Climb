@@ -10,7 +10,7 @@ public class SetClimbAngle extends Command {
 
     /**
      * Creates a new {@link SetClimbAngle} command.
-     * It adjusts the setpoint for the {@link Climb} system.
+     * It adjusts the setpoint for the climb system.
      * 
      * @param climb The {@link Climb} subsystem to control.
      * @param angle The {@link Angle} to go to.
