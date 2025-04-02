@@ -21,6 +21,8 @@ public class ClimbIOSim implements ClimbIO {
 
     private ClimbIOInputsAutoLogged inputs;
 
+    private boolean voltageControl = false;
+
     public ClimbIOSim() {
         motor = new DCMotorSim(
                 LinearSystemId.createDCMotorSystem(
@@ -43,7 +45,7 @@ public class ClimbIOSim implements ClimbIO {
         if (AdjustableValues.hasChanged("Climb_kI")) controller.setI(AdjustableValues.getNumber("Climb_kI"));
         if (AdjustableValues.hasChanged("Climb_kD")) controller.setD(AdjustableValues.getNumber("Climb_kD"));
 
-        motor.setInputVoltage(controller.calculate(motor.getAngularPositionRad()));
+        if (!voltageControl) motor.setInputVoltage(controller.calculate(motor.getAngularPositionRad()));
 
         motor.update(0.02);
 
@@ -60,11 +62,13 @@ public class ClimbIOSim implements ClimbIO {
 
     @Override
     public void setVolts(Voltage volts) {
+        voltageControl = true;
         motor.setInputVoltage(volts.in(Volts));
     }
 
     @Override
     public void setAngle(Angle angle) {
+        voltageControl = false;
         controller.setSetpoint(angle.in(Radians));
     }
 
