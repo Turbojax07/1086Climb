@@ -64,6 +64,11 @@ public class ClimbIOReal implements ClimbIO {
             motor.getConfigurator().apply(config);
         }
 
+        // Stopping the motor if at the extremes.
+        if (getAngle().gt(ClimbConstants.maxAngle) || getAngle().lt(ClimbConstants.minAngle)) {
+            motor.setControl(new VoltageOut(Volts.zero()));
+        }
+
         inputs.angle = getAngle();
         inputs.velocity = getVelocity();
         inputs.acceleration = getAcceleration();
@@ -76,11 +81,25 @@ public class ClimbIOReal implements ClimbIO {
 
     @Override
     public void setAngle(Angle angle) {
+        // Clamping the angle to the max or min positions
+        if (angle.gt(ClimbConstants.maxAngle)) {
+            angle = ClimbConstants.maxAngle;
+        }
+
+        if (angle.lt(ClimbConstants.minAngle)) {
+            angle = ClimbConstants.minAngle;
+        }
+
         motor.setControl(new PositionVoltage(angle));
     }
 
     @Override
     public void setVolts(Voltage volts) {
+        // Stopping the motor if at the extremes.
+        if (getAngle().gt(ClimbConstants.maxAngle) || getAngle().lt(ClimbConstants.minAngle)) {
+            volts = Volts.zero();
+        }
+
         motor.setControl(new VoltageOut(volts));
     }
 
