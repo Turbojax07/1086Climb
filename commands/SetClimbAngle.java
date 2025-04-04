@@ -26,11 +26,6 @@ public class SetClimbAngle extends Command {
     @Override
     public void initialize() {
         climb.setAngle(angle);
-    }
-
-    /** Returns true when the command should end. */
-    @Override
-    public boolean isFinished() {
-        return true;
+        cancel();
     }
 }
