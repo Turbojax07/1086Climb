@@ -3,6 +3,8 @@ package frc.robot.subsystems.climb;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularAcceleration;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.MomentOfInertia;
 
@@ -19,6 +21,9 @@ public class ClimbConstants {
 
     public static final Angle minAngle = Radians.of(0);
     public static final Angle maxAngle = Radians.of(1.2);
+
+    public static final AngularVelocity maxVelocity = RadiansPerSecond.of(Math.PI);
+    public static final AngularAcceleration maxAcceleration = RadiansPerSecondPerSecond.of(Math.PI);
 
     public class ClimbPositions {
         public static final Angle STOW = Radians.of(0);

@@ -25,9 +25,6 @@ public interface ClimbIO {
     /** Updates a set of IO inputs with current values. */
     public void updateInputs();
 
-    /** Sets the desired angle of the climb motor. */
-    public void setAngle(Angle angle);
-
     /** Sets the voltage output of the climb motor. */
     public void setVolts(Voltage volts);
 

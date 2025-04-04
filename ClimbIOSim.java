@@ -2,7 +2,6 @@ package frc.robot.subsystems.climb;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Angle;
@@ -12,16 +11,11 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import frc.robot.util.AdjustableValues;
 import org.littletonrobotics.junction.Logger;
 
 public class ClimbIOSim implements ClimbIO {
     private DCMotorSim motor;
-    private PIDController controller;
-
     private ClimbIOInputsAutoLogged inputs;
-
-    private boolean voltageControl = false;
 
     public ClimbIOSim() {
         motor = new DCMotorSim(
@@ -31,22 +25,11 @@ public class ClimbIOSim implements ClimbIO {
                         ClimbConstants.gearRatio),
                 DCMotor.getNEO(1));
 
-        controller = new PIDController(
-                AdjustableValues.getNumber("Climb_kP"),
-                AdjustableValues.getNumber("Climb_kI"),
-                AdjustableValues.getNumber("Climb_kD"));
-
         inputs = new ClimbIOInputsAutoLogged();
     }
 
     @Override
     public void updateInputs() {
-        if (AdjustableValues.hasChanged("Climb_kP")) controller.setP(AdjustableValues.getNumber("Climb_kP"));
-        if (AdjustableValues.hasChanged("Climb_kI")) controller.setI(AdjustableValues.getNumber("Climb_kI"));
-        if (AdjustableValues.hasChanged("Climb_kD")) controller.setD(AdjustableValues.getNumber("Climb_kD"));
-
-        if (!voltageControl) motor.setInputVoltage(controller.calculate(motor.getAngularPositionRad()));
-
         motor.update(0.02);
 
         inputs.angle = getAngle();
@@ -62,14 +45,7 @@ public class ClimbIOSim implements ClimbIO {
 
     @Override
     public void setVolts(Voltage volts) {
-        voltageControl = true;
         motor.setInputVoltage(volts.in(Volts));
-    }
-
-    @Override
-    public void setAngle(Angle angle) {
-        voltageControl = false;
-        controller.setSetpoint(angle.in(Radians));
     }
 
     @Override
