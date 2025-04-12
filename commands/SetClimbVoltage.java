@@ -1,7 +1,5 @@
 package frc.robot.subsystems.climb.commands;
 
-import static edu.wpi.first.units.Units.Volts;
-
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -36,12 +34,12 @@ public class SetClimbVoltage extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        climb.setVoltage(Volts.of(speed * AdjustableValues.getNumber("Climb_Percent") * RobotController.getInputVoltage()));
+        climb.setVoltage(speed * AdjustableValues.getNumber("Climb_Percent") * RobotController.getInputVoltage());
     }
 
     /** Called once the command ends or is interrupted. */
     @Override
     public void end(boolean interrupted) {
-        climb.setVoltage(Volts.zero());
+        climb.setVoltage(0);
     }
 }

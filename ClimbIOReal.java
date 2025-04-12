@@ -1,7 +1,5 @@
 package frc.robot.subsystems.climb;
 
-import static edu.wpi.first.units.Units.*;
-
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -10,8 +8,6 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Voltage;
 import frc.robot.util.AdjustableValues;
 
 public class ClimbIOReal implements ClimbIO {
@@ -27,14 +23,14 @@ public class ClimbIOReal implements ClimbIO {
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        config.CurrentLimits.StatorCurrentLimit = ClimbConstants.currentLimit.in(Amps);
+        config.CurrentLimits.StatorCurrentLimit = ClimbConstants.currentLimit;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.Feedback.SensorToMechanismRatio = ClimbConstants.gearRatio;
         config.Slot0.kP = AdjustableValues.getNumber("Climb_kP");
         config.Slot0.kI = AdjustableValues.getNumber("Climb_kI");
         config.Slot0.kD = AdjustableValues.getNumber("Climb_kD");
-        config.MotionMagic.MotionMagicAcceleration = ClimbConstants.maxAcceleration.in(RadiansPerSecondPerSecond);
-        config.MotionMagic.MotionMagicCruiseVelocity = ClimbConstants.maxVelocity.in(RadiansPerSecond);
+        config.MotionMagic.MotionMagicAcceleration = ClimbConstants.maxAcceleration;
+        config.MotionMagic.MotionMagicCruiseVelocity = ClimbConstants.maxVelocity;
 
         motor.getConfigurator().apply(config);
     }
@@ -47,19 +43,18 @@ public class ClimbIOReal implements ClimbIO {
         if (AdjustableValues.hasChanged("Climb_kD")) pidConfig.kD = AdjustableValues.getNumber("Climb_kD");
         if (pidConfig.serialize().equals(new Slot0Configs().serialize())) motor.getConfigurator().apply(pidConfig);
 
-        inputs.acceleration = motor.getAcceleration().getValue();
-        inputs.current = motor.getStatorCurrent().getValue();
+        inputs.acceleration = motor.getAcceleration().getValueAsDouble() * Math.PI * 2;
+        inputs.current = motor.getStatorCurrent().getValueAsDouble();
         inputs.percent = motor.getDutyCycle().getValue();
-        inputs.position = motor.getPosition().getValue();
-        inputs.temperature = motor.getDeviceTemp().getValue();
-        inputs.velocity = motor.getVelocity().getValue();
-        inputs.voltage = motor.getMotorVoltage().getValue();
+        inputs.position = motor.getPosition().getValueAsDouble() * Math.PI * 2;
+        inputs.temperature = motor.getDeviceTemp().getValueAsDouble();
+        inputs.velocity = motor.getVelocity().getValueAsDouble() * Math.PI * 2;
+        inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
     }
 
     @Override
-    public void setAngle(Angle angle) {
-        motor.setControl(positionControl.withPosition(angle));
-        
+    public void setAngle(double angle) {
+        motor.setControl(positionControl.withPosition(angle / 2 / Math.PI));
     }
 
     @Override
@@ -68,7 +63,7 @@ public class ClimbIOReal implements ClimbIO {
     }
 
     @Override
-    public void setVoltage(Voltage voltage) {
+    public void setVoltage(double voltage) {
         motor.setControl(voltageControl.withOutput(voltage));
     }
 }

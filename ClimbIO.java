@@ -1,36 +1,32 @@
 package frc.robot.subsystems.climb;
 
-import static edu.wpi.first.units.Units.*;
-
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularAcceleration;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Temperature;
-import edu.wpi.first.units.measure.Voltage;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ClimbIO {
     @AutoLog
     public class ClimbIOInputs {
-        AngularAcceleration acceleration = RadiansPerSecondPerSecond.zero();
-        Current current = Amps.zero();
-        Angle position = Radians.zero();
+        double acceleration = 0; // Radians / Second^2
+        double current = 0; // Amps
+        double position = 0; // Radians
         double percent = 0;
-        Temperature temperature = Celsius.zero();
-        AngularVelocity velocity = RadiansPerSecond.zero();
-        Voltage voltage = Volts.zero();
+        double temperature = 0; // Celsius
+        double velocity = 0; // Radians / Second
+        double voltage = 0; // Volts
     }
 
     /** Updates a set of IO inputs with current values. */
     public void updateInputs(ClimbIOInputs inputs);
 
-    /** Sets the angle of the climb motor. */
-    public void setAngle(Angle angle);
+    /** 
+     * Sets the angle of the climb motor.
+     * 
+     * @param angle The angle in radians.
+     */
+    public void setAngle(double angle);
 
     /** Sets the percent output of the climb motor. */
     public void setPercent(double percent);
 
     /** Sets the voltage output of the climb motor. */
-    public void setVoltage(Voltage voltage);
+    public void setVoltage(double voltage);
 }

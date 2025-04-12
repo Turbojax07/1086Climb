@@ -1,13 +1,9 @@
 package frc.robot.subsystems.climb;
 
-import static edu.wpi.first.units.Units.*;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.util.AdjustableValues;
@@ -23,7 +19,7 @@ public class ClimbIOSim implements ClimbIO {
         motor = new DCMotorSim(
                 LinearSystemId.createDCMotorSystem(
                         DCMotor.getNEO(1),
-                        ClimbConstants.moi.magnitude(),
+                        ClimbConstants.moi,
                         ClimbConstants.gearRatio),
                 DCMotor.getNEO(1));
 
@@ -32,8 +28,8 @@ public class ClimbIOSim implements ClimbIO {
             AdjustableValues.getNumber("Climb_kI"),
             AdjustableValues.getNumber("Climb_kD"),
             new TrapezoidProfile.Constraints(
-                ClimbConstants.maxVelocity.in(RadiansPerSecond),
-                ClimbConstants.maxAcceleration.in(RadiansPerSecondPerSecond)));
+                ClimbConstants.maxVelocity,
+                ClimbConstants.maxAcceleration));
     }
 
     @Override
@@ -46,19 +42,19 @@ public class ClimbIOSim implements ClimbIO {
 
         motor.update(0.02);
 
-        inputs.acceleration = motor.getAngularAcceleration();
-        inputs.current = Amps.of(motor.getCurrentDrawAmps());
+        inputs.acceleration = motor.getAngularAccelerationRadPerSecSq();
+        inputs.current = motor.getCurrentDrawAmps();
         inputs.percent = motor.getInputVoltage() / RobotController.getInputVoltage();
-        inputs.position = motor.getAngularPosition();
-        inputs.velocity = motor.getAngularVelocity();
-        inputs.voltage = Volts.of(motor.getInputVoltage());
+        inputs.position = motor.getAngularPositionRad();
+        inputs.velocity = motor.getAngularVelocityRadPerSec();
+        inputs.voltage = motor.getInputVoltage();
     }
 
     @Override
-    public void setAngle(Angle angle) {
+    public void setAngle(double angle) {
         closedLoop = true;
         
-        controller.setGoal(angle.in(Radians));
+        controller.setGoal(angle);
     }
 
     @Override
@@ -69,9 +65,9 @@ public class ClimbIOSim implements ClimbIO {
     }
 
     @Override
-    public void setVoltage(Voltage voltage) {
+    public void setVoltage(double voltage) {
         closedLoop = false;
 
-        motor.setInputVoltage(voltage.in(Volts));
+        motor.setInputVoltage(voltage);
     }
 }
