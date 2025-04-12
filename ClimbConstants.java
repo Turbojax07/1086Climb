@@ -13,6 +13,8 @@ public class ClimbConstants {
 
     public static final Current currentLimit = Amps.of(60);
 
+    public static final double maxPercent = 1;
+
     public static final MomentOfInertia moi = KilogramSquareMeters.of(1);
 
     public static final double kPDefault = 41.75;
