@@ -49,6 +49,7 @@ public class ClimbIOReal implements ClimbIO {
 
         inputs.acceleration = motor.getAcceleration().getValue();
         inputs.current = motor.getStatorCurrent().getValue();
+        inputs.percent = motor.getDutyCycle().getValue();
         inputs.position = motor.getPosition().getValue();
         inputs.temperature = motor.getDeviceTemp().getValue();
         inputs.velocity = motor.getVelocity().getValue();

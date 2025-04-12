@@ -13,13 +13,13 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ClimbIO {
     @AutoLog
     public class ClimbIOInputs {
-        Angle position = Radians.zero();
-        AngularVelocity velocity = RadiansPerSecond.zero();
         AngularAcceleration acceleration = RadiansPerSecondPerSecond.zero();
-
-        Voltage voltage = Volts.zero();
         Current current = Amps.zero();
+        Angle position = Radians.zero();
+        double percent = 0;
         Temperature temperature = Celsius.zero();
+        AngularVelocity velocity = RadiansPerSecond.zero();
+        Voltage voltage = Volts.zero();
     }
 
     /** Updates a set of IO inputs with current values. */

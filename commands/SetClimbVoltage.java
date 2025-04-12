@@ -16,10 +16,10 @@ public class SetClimbVoltage extends Command {
 
     /**
      * Creates a new {@link SetClimbVoltage} command.
-     * It sets the voltage of the climb system.
+     * It sets the voltage output of the climb system.
      * 
      * @param climb The {@link Climb} system to control.
-     * @param throttle The percent output to run at.
+     * @param throttle The percent of max voltage to run at.
      */
     public SetClimbVoltage(Climb climb, Supplier<Double> throttle) {
         this.climb = climb;

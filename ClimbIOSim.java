@@ -48,6 +48,7 @@ public class ClimbIOSim implements ClimbIO {
 
         inputs.acceleration = motor.getAngularAcceleration();
         inputs.current = Amps.of(motor.getCurrentDrawAmps());
+        inputs.percent = motor.getInputVoltage() / RobotController.getInputVoltage();
         inputs.position = motor.getAngularPosition();
         inputs.velocity = motor.getAngularVelocity();
         inputs.voltage = Volts.of(motor.getInputVoltage());

@@ -23,6 +23,11 @@ public class Climb extends SubsystemBase {
         climbIO.updateInputs(inputs);
     }
 
+    /**
+     * Sets the angle setpoint of the climb system.
+     * 
+     * @param angle The {@link Angle} to go to.
+     */
     public void setAngle(Angle angle) {
         Logger.recordOutput("/Climb/GoalAngle", angle);
 
@@ -33,6 +38,11 @@ public class Climb extends SubsystemBase {
         climbIO.setAngle(angle);
     }
 
+    /**
+     * Sets the percent output to run the climb system at.
+     * 
+     * @param percent The percent output to run at.
+     */
     public void setPercent(double percent) {
         Logger.recordOutput("/Climb/GoalPercent", percent);
 
@@ -42,6 +52,11 @@ public class Climb extends SubsystemBase {
         climbIO.setPercent(percent);
     }
 
+    /**
+     * Sets the voltage output to run the climb system at.
+     * 
+     * @param voltage The voltage output to run at as a {@link Voltage}.
+     */
     public void setVoltage(Voltage voltage) {
         Logger.recordOutput("/Climb/GoalVoltage", voltage);
 
