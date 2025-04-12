@@ -6,13 +6,13 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.climb.Climb;
+import frc.robot.util.AdjustableValues;
 import frc.robot.util.MathUtils;
 import java.util.function.Supplier;
 
 public class SetClimbSpeed extends Command {
     private Climb climb;
     private Supplier<Double> throttle;
-    private Supplier<Double> percentSupplier;
 
     /**
      * Creates a new {@link SetClimbSpeed} command.
@@ -20,12 +20,10 @@ public class SetClimbSpeed extends Command {
      * 
      * @param climb The {@link Climb} system to control.
      * @param throttle The percent output to run at.
-     * @param percentSupplier The max percent to run at.
      */
-    public SetClimbSpeed(Climb climb, Supplier<Double> throttle, Supplier<Double> percentSupplier) {
+    public SetClimbSpeed(Climb climb, Supplier<Double> throttle) {
         this.climb = climb;
         this.throttle = throttle;
-        this.percentSupplier = percentSupplier;
 
         addRequirements(climb);
     }
@@ -38,7 +36,7 @@ public class SetClimbSpeed extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        climb.setVolts(Volts.of(speed * percentSupplier.get() * RobotController.getInputVoltage()));
+        climb.setVolts(Volts.of(speed * AdjustableValues.getNumber("Climb_Percent") * RobotController.getInputVoltage()));
     }
 
     /** Called once the command ends or is interrupted. */
