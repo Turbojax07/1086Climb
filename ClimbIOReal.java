@@ -59,12 +59,11 @@ public class ClimbIOReal implements ClimbIO {
     @Override
     public void setAngle(Angle angle) {
         motor.setControl(positionControl.withPosition(angle));
-        
     }
 
     @Override
     public void setPercent(double percent) {
-        motor.setControl(percentControl.withOutput(percent));        
+        motor.setControl(percentControl.withOutput(percent));
     }
 
     @Override
