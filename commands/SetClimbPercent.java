@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.climb.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,7 +15,7 @@ public class SetClimbPercent extends Command {
     /**
      * Creates a new {@link SetClimbPercent} command.
      * It sets the percent output of the climb system.
-     * 
+     *
      * @param climb The {@link Climb} system to control.
      * @param throttle The percent output to run at.
      */
@@ -33,7 +34,7 @@ public class SetClimbPercent extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        climb.setPercent(speed * AdjustableValues.getNumber("Climb_Percent"));
+        climb.setPercent(speed);// * AdjustableValues.getNumber("Climb_Percent"));
     }
 
     /** Called once the command ends or is interrupted. */

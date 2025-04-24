@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.climb;
 
 import static edu.wpi.first.units.Units.*;
@@ -32,9 +33,9 @@ public class ClimbSim extends Climb {
                 DCMotor.getNEO(1));
 
         controller = new ProfiledPIDController(
-            AdjustableValues.getNumber("Climb_kP"),
-            AdjustableValues.getNumber("Climb_kI"),
-            AdjustableValues.getNumber("Climb_kD"),
+            0,//AdjustableValues.getNumber("Climb_kP"),
+            0,//AdjustableValues.getNumber("Climb_kI"),
+            0,//AdjustableValues.getNumber("Climb_kD"),
             new TrapezoidProfile.Constraints(
                 ClimbConstants.maxVelocity.in(RadiansPerSecond),
                 ClimbConstants.maxAcceleration.in(RadiansPerSecondPerSecond)));
@@ -42,9 +43,9 @@ public class ClimbSim extends Climb {
 
     @Override
     public void periodic() {
-        if (AdjustableValues.hasChanged("Climb_kP")) controller.setP(AdjustableValues.getNumber("Climb_kP"));
-        if (AdjustableValues.hasChanged("Climb_kI")) controller.setI(AdjustableValues.getNumber("Climb_kI"));
-        if (AdjustableValues.hasChanged("Climb_kD")) controller.setD(AdjustableValues.getNumber("Climb_kD"));
+        // if (AdjustableValues.hasChanged("Climb_kP")) controller.setP(AdjustableValues.getNumber("Climb_kP"));
+        // if (AdjustableValues.hasChanged("Climb_kI")) controller.setI(AdjustableValues.getNumber("Climb_kI"));
+        // if (AdjustableValues.hasChanged("Climb_kD")) controller.setD(AdjustableValues.getNumber("Climb_kD"));
 
         if (closedLoop) motor.setInputVoltage(controller.calculate(motor.getAngularPositionRad()));
 
@@ -81,7 +82,7 @@ public class ClimbSim extends Climb {
         if (getPosition().gte(ClimbConstants.maxAngle) || getPosition().lte(ClimbConstants.minAngle)) percent = 0;
 
         closedLoop = false;
-        
+
         motor.setInputVoltage(percent * RobotController.getInputVoltage());
     }
 
@@ -104,19 +105,19 @@ public class ClimbSim extends Climb {
     public Current getCurrent() {
         return Amps.of(motor.getCurrentDrawAmps());
     }
-    
+
     public Angle getPosition() {
         return motor.getAngularPosition();
     }
-    
+
     public double getPercent() {
         return motor.getInputVoltage() / RobotController.getInputVoltage();
     }
-    
+
     public AngularVelocity getVelocity() {
         return motor.getAngularVelocity();
     }
-    
+
     public Voltage getVoltage() {
         return Volts.of(motor.getInputVoltage());
     }

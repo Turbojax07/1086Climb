@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.climb;
 
 import static edu.wpi.first.units.Units.*;
@@ -35,9 +36,9 @@ public class ClimbReal extends Climb {
         config.CurrentLimits.StatorCurrentLimit = ClimbConstants.currentLimit.in(Amps);
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.Feedback.SensorToMechanismRatio = ClimbConstants.gearRatio;
-        config.Slot0.kP = AdjustableValues.getNumber("Climb_kP");
-        config.Slot0.kI = AdjustableValues.getNumber("Climb_kI");
-        config.Slot0.kD = AdjustableValues.getNumber("Climb_kD");
+        // config.Slot0.kP = AdjustableValues.getNumber("Climb_kP");
+        // config.Slot0.kI = AdjustableValues.getNumber("Climb_kI");
+        // config.Slot0.kD = AdjustableValues.getNumber("Climb_kD");
         config.MotionMagic.MotionMagicAcceleration = ClimbConstants.maxAcceleration.in(RadiansPerSecondPerSecond);
         config.MotionMagic.MotionMagicCruiseVelocity = ClimbConstants.maxVelocity.in(RadiansPerSecond);
 
@@ -47,9 +48,9 @@ public class ClimbReal extends Climb {
     @Override
     public void periodic() {
         Slot0Configs pidConfig = new Slot0Configs();
-        if (AdjustableValues.hasChanged("Climb_kP")) pidConfig.kP = AdjustableValues.getNumber("Climb_kP");
-        if (AdjustableValues.hasChanged("Climb_kI")) pidConfig.kI = AdjustableValues.getNumber("Climb_kI");
-        if (AdjustableValues.hasChanged("Climb_kD")) pidConfig.kD = AdjustableValues.getNumber("Climb_kD");
+        // if (AdjustableValues.hasChanged("Climb_kP")) pidConfig.kP = AdjustableValues.getNumber("Climb_kP");
+        // if (AdjustableValues.hasChanged("Climb_kI")) pidConfig.kI = AdjustableValues.getNumber("Climb_kI");
+        // if (AdjustableValues.hasChanged("Climb_kD")) pidConfig.kD = AdjustableValues.getNumber("Climb_kD");
         if (pidConfig.serialize().equals(new Slot0Configs().serialize())) motor.getConfigurator().apply(pidConfig);
 
         SmartDashboard.putNumber("/Climb/Acceleration", getAcceleration().in(RadiansPerSecondPerSecond));
@@ -68,14 +69,14 @@ public class ClimbReal extends Climb {
         // Clamping the input angle
         if (getPosition().gt(ClimbConstants.maxAngle)) angle = ClimbConstants.maxAngle;
         if (getPosition().lt(ClimbConstants.minAngle)) angle = ClimbConstants.minAngle;
-        
+
         motor.setControl(positionControl.withPosition(angle));
     }
 
     @Override
     public void setPercent(double percent) {
         SmartDashboard.putNumber("/Climb/Percent/Setpoint", percent);
-        
+
         // Stopping the motor if at the max or min angles.
         if (getPosition().gte(ClimbConstants.maxAngle) || getPosition().lte(ClimbConstants.minAngle)) percent = 0;
 
@@ -85,7 +86,7 @@ public class ClimbReal extends Climb {
     @Override
     public void setVoltage(Voltage voltage) {
         SmartDashboard.putNumber("/Climb/Voltage/Setpoint", voltage.in(Volts));
-        
+
         // Stopping the motor if at the max or min angles.
         if (getPosition().gte(ClimbConstants.maxAngle) || getPosition().lte(ClimbConstants.minAngle)) voltage = Volts.zero();
 
@@ -99,23 +100,23 @@ public class ClimbReal extends Climb {
     public Current getCurrent() {
         return motor.getStatorCurrent().getValue();
     }
-    
+
     public Angle getPosition() {
         return motor.getPosition().getValue();
     }
-    
+
     public double getPercent() {
         return motor.get();
     }
-    
+
     public Temperature getTemperature() {
         return motor.getDeviceTemp().getValue();
     }
-    
+
     public AngularVelocity getVelocity() {
         return motor.getVelocity().getValue();
     }
-    
+
     public Voltage getVoltage() {
         return motor.getMotorVoltage().getValue();
     }

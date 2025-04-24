@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.climb.commands;
 
 import static edu.wpi.first.units.Units.Volts;
@@ -17,7 +18,7 @@ public class SetClimbVoltage extends Command {
     /**
      * Creates a new {@link SetClimbVoltage} command.
      * It sets the voltage output of the climb system.
-     * 
+     *
      * @param climb The {@link Climb} system to control.
      * @param throttle The percent of max voltage to run at.
      */
@@ -36,7 +37,7 @@ public class SetClimbVoltage extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        climb.setVoltage(Volts.of(speed * AdjustableValues.getNumber("Climb_Percent") * RobotController.getInputVoltage()));
+        climb.setVoltage(Volts.of(speed));// * AdjustableValues.getNumber("Climb_Percent") * RobotController.getInputVoltage()));
     }
 
     /** Called once the command ends or is interrupted. */

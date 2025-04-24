@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.climb;
 
 import static edu.wpi.first.units.Units.*;
@@ -24,23 +25,23 @@ public class Climb extends SubsystemBase {
     public Current getCurrent() {
         return Amps.zero();
     }
-    
+
     public Angle getPosition() {
         return Radians.zero();
     }
-    
+
     public double getPercent() {
         return 0;
     }
-    
+
     public Temperature getTemperature() {
         return Celsius.zero();
     }
-    
+
     public AngularVelocity getVelocity() {
         return RadiansPerSecond.zero();
     }
-    
+
     public Voltage getVoltage() {
         return Volts.zero();
     }
