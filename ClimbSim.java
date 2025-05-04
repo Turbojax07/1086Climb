@@ -14,8 +14,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.util.AdjustableValues;
+import frc.robot.util.TurboLogger;
 
 public class ClimbSim extends Climb {
     private DCMotorSim motor;
@@ -33,9 +32,9 @@ public class ClimbSim extends Climb {
                 DCMotor.getNEO(1));
 
         controller = new ProfiledPIDController(
-            0,//AdjustableValues.getNumber("Climb_kP"),
-            0,//AdjustableValues.getNumber("Climb_kI"),
-            0,//AdjustableValues.getNumber("Climb_kD"),
+            TurboLogger.get("Climb_kP", ClimbConstants.kPDefault),
+            TurboLogger.get("Climb_kI", ClimbConstants.kIDefault),
+            TurboLogger.get("Climb_kD", ClimbConstants.kDDefault),
             new TrapezoidProfile.Constraints(
                 ClimbConstants.maxVelocity.in(RadiansPerSecond),
                 ClimbConstants.maxAcceleration.in(RadiansPerSecondPerSecond)));
@@ -43,26 +42,26 @@ public class ClimbSim extends Climb {
 
     @Override
     public void periodic() {
-        // if (AdjustableValues.hasChanged("Climb_kP")) controller.setP(AdjustableValues.getNumber("Climb_kP"));
-        // if (AdjustableValues.hasChanged("Climb_kI")) controller.setI(AdjustableValues.getNumber("Climb_kI"));
-        // if (AdjustableValues.hasChanged("Climb_kD")) controller.setD(AdjustableValues.getNumber("Climb_kD"));
+        if (TurboLogger.hasChanged("Climb_kP")) controller.setP(TurboLogger.get("Climb_kP", ClimbConstants.kPDefault));
+        if (TurboLogger.hasChanged("Climb_kI")) controller.setI(TurboLogger.get("Climb_kI", ClimbConstants.kIDefault));
+        if (TurboLogger.hasChanged("Climb_kD")) controller.setD(TurboLogger.get("Climb_kD", ClimbConstants.kDDefault));
 
         if (closedLoop) motor.setInputVoltage(controller.calculate(motor.getAngularPositionRad()));
 
         motor.update(0.02);
 
-        SmartDashboard.putNumber("/Climb/Acceleration", getAcceleration().in(RadiansPerSecondPerSecond));
-        SmartDashboard.putNumber("/Climb/Current", getCurrent().in(Amps));
-        SmartDashboard.putNumber("/Climb/Percent/Actual", getPercent());
-        SmartDashboard.putNumber("/Climb/Position/Actual", getPosition().in(Radians));
-        SmartDashboard.putNumber("/Climb/Temperature", getTemperature().in(Celsius));
-        SmartDashboard.putNumber("/Climb/Velocity", getVelocity().in(RadiansPerSecond));
-        SmartDashboard.putNumber("/Climb/Voltage/Actual", getVoltage().in(Volts));
+        TurboLogger.log("/Climb/Acceleration", getAcceleration().in(RadiansPerSecondPerSecond));
+        TurboLogger.log("/Climb/Current", getCurrent().in(Amps));
+        TurboLogger.log("/Climb/Percent/Actual", getPercent());
+        TurboLogger.log("/Climb/Position/Actual", getPosition().in(Radians));
+        TurboLogger.log("/Climb/Temperature", getTemperature().in(Celsius));
+        TurboLogger.log("/Climb/Velocity", getVelocity().in(RadiansPerSecond));
+        TurboLogger.log("/Climb/Voltage/Actual", getVoltage().in(Volts));
     }
 
     @Override
     public void setAngle(Angle angle) {
-        SmartDashboard.putNumber("/Climb/Position/Setpoint", angle.in(Radians));
+        TurboLogger.log("/Climb/Position/Setpoint", angle.in(Radians));
 
         // Clamping the input angle
         if (getPosition().gt(ClimbConstants.maxAngle)) angle = ClimbConstants.maxAngle;
@@ -76,7 +75,7 @@ public class ClimbSim extends Climb {
 
     @Override
     public void setPercent(double percent) {
-        SmartDashboard.putNumber("/Climb/Percent/Setpoint", percent);
+        TurboLogger.log("/Climb/Percent/Setpoint", percent);
 
         // Stopping the motor if at the max or min angles.
         if (getPosition().gte(ClimbConstants.maxAngle) || getPosition().lte(ClimbConstants.minAngle)) percent = 0;
@@ -88,7 +87,7 @@ public class ClimbSim extends Climb {
 
     @Override
     public void setVoltage(Voltage voltage) {
-        SmartDashboard.putNumber("/Climb/Voltage/Setpoint", voltage.in(Volts));
+        TurboLogger.log("/Climb/Voltage/Setpoint", voltage.in(Volts));
 
         // Stopping the motor if at the max or min angles.
         if (getPosition().gte(ClimbConstants.maxAngle) || getPosition().lte(ClimbConstants.minAngle)) voltage = Volts.zero();

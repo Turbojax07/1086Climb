@@ -4,7 +4,8 @@ package frc.robot.subsystems.climb.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.climb.Climb;
-import frc.robot.util.AdjustableValues;
+import frc.robot.subsystems.climb.ClimbConstants;
+import frc.robot.util.TurboLogger;
 import frc.robot.util.MathUtils;
 import java.util.function.Supplier;
 
@@ -34,7 +35,7 @@ public class SetClimbPercent extends Command {
         speed = MathUtils.applyDeadbandWithOffsets(speed, Constants.deadband);
         speed = Math.copySign(speed * speed, speed);
 
-        climb.setPercent(speed);// * AdjustableValues.getNumber("Climb_Percent"));
+        climb.setPercent(speed * TurboLogger.get("Climb_Percent", ClimbConstants.maxPercent));
     }
 
     /** Called once the command ends or is interrupted. */

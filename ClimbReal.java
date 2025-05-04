@@ -17,8 +17,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.util.AdjustableValues;
+import frc.robot.util.TurboLogger;
 
 public class ClimbReal extends Climb {
     private TalonFX motor;
@@ -36,9 +35,9 @@ public class ClimbReal extends Climb {
         config.CurrentLimits.StatorCurrentLimit = ClimbConstants.currentLimit.in(Amps);
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.Feedback.SensorToMechanismRatio = ClimbConstants.gearRatio;
-        // config.Slot0.kP = AdjustableValues.getNumber("Climb_kP");
-        // config.Slot0.kI = AdjustableValues.getNumber("Climb_kI");
-        // config.Slot0.kD = AdjustableValues.getNumber("Climb_kD");
+        config.Slot0.kP = TurboLogger.get("Climb_kP", ClimbConstants.kPDefault);
+        config.Slot0.kI = TurboLogger.get("Climb_kI", ClimbConstants.kIDefault);
+        config.Slot0.kD = TurboLogger.get("Climb_kD", ClimbConstants.kDDefault);
         config.MotionMagic.MotionMagicAcceleration = ClimbConstants.maxAcceleration.in(RadiansPerSecondPerSecond);
         config.MotionMagic.MotionMagicCruiseVelocity = ClimbConstants.maxVelocity.in(RadiansPerSecond);
 
@@ -48,23 +47,23 @@ public class ClimbReal extends Climb {
     @Override
     public void periodic() {
         Slot0Configs pidConfig = new Slot0Configs();
-        // if (AdjustableValues.hasChanged("Climb_kP")) pidConfig.kP = AdjustableValues.getNumber("Climb_kP");
-        // if (AdjustableValues.hasChanged("Climb_kI")) pidConfig.kI = AdjustableValues.getNumber("Climb_kI");
-        // if (AdjustableValues.hasChanged("Climb_kD")) pidConfig.kD = AdjustableValues.getNumber("Climb_kD");
+        if (TurboLogger.hasChanged("Climb_kP")) pidConfig.kP = TurboLogger.get("Climb_kP", ClimbConstants.kPDefault);
+        if (TurboLogger.hasChanged("Climb_kI")) pidConfig.kI = TurboLogger.get("Climb_kI", ClimbConstants.kIDefault);
+        if (TurboLogger.hasChanged("Climb_kD")) pidConfig.kD = TurboLogger.get("Climb_kD", ClimbConstants.kDDefault);
         if (pidConfig.serialize().equals(new Slot0Configs().serialize())) motor.getConfigurator().apply(pidConfig);
 
-        SmartDashboard.putNumber("/Climb/Acceleration", getAcceleration().in(RadiansPerSecondPerSecond));
-        SmartDashboard.putNumber("/Climb/Current", getCurrent().in(Amps));
-        SmartDashboard.putNumber("/Climb/Percent/Actual", getPercent());
-        SmartDashboard.putNumber("/Climb/Position/Actual", getPosition().in(Radians));
-        SmartDashboard.putNumber("/Climb/Temperature", getTemperature().in(Celsius));
-        SmartDashboard.putNumber("/Climb/Velocity", getVelocity().in(RadiansPerSecond));
-        SmartDashboard.putNumber("/Climb/Voltage/Actual", getVoltage().in(Volts));
+        TurboLogger.log("/Climb/Acceleration", getAcceleration().in(RadiansPerSecondPerSecond));
+        TurboLogger.log("/Climb/Current", getCurrent().in(Amps));
+        TurboLogger.log("/Climb/Percent/Actual", getPercent());
+        TurboLogger.log("/Climb/Position/Actual", getPosition().in(Radians));
+        TurboLogger.log("/Climb/Temperature", getTemperature().in(Celsius));
+        TurboLogger.log("/Climb/Velocity", getVelocity().in(RadiansPerSecond));
+        TurboLogger.log("/Climb/Voltage/Actual", getVoltage().in(Volts));
     }
 
     @Override
     public void setAngle(Angle angle) {
-        SmartDashboard.putNumber("/Climb/Position/Setpoint", angle.in(Radians));
+        TurboLogger.log("/Climb/Position/Setpoint", angle.in(Radians));
 
         // Clamping the input angle
         if (getPosition().gt(ClimbConstants.maxAngle)) angle = ClimbConstants.maxAngle;
@@ -75,7 +74,7 @@ public class ClimbReal extends Climb {
 
     @Override
     public void setPercent(double percent) {
-        SmartDashboard.putNumber("/Climb/Percent/Setpoint", percent);
+        TurboLogger.log("/Climb/Percent/Setpoint", percent);
 
         // Stopping the motor if at the max or min angles.
         if (getPosition().gte(ClimbConstants.maxAngle) || getPosition().lte(ClimbConstants.minAngle)) percent = 0;
@@ -85,7 +84,7 @@ public class ClimbReal extends Climb {
 
     @Override
     public void setVoltage(Voltage voltage) {
-        SmartDashboard.putNumber("/Climb/Voltage/Setpoint", voltage.in(Volts));
+        TurboLogger.log("/Climb/Voltage/Setpoint", voltage.in(Volts));
 
         // Stopping the motor if at the max or min angles.
         if (getPosition().gte(ClimbConstants.maxAngle) || getPosition().lte(ClimbConstants.minAngle)) voltage = Volts.zero();
