@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.climb;
 
 import static edu.wpi.first.units.Units.*;
@@ -38,8 +37,10 @@ public class ClimbReal extends Climb {
         config.Slot0.kP = TurboLogger.get("Climb_kP", ClimbConstants.kPDefault);
         config.Slot0.kI = TurboLogger.get("Climb_kI", ClimbConstants.kIDefault);
         config.Slot0.kD = TurboLogger.get("Climb_kD", ClimbConstants.kDDefault);
-        config.MotionMagic.MotionMagicAcceleration = ClimbConstants.maxAcceleration.in(RadiansPerSecondPerSecond);
-        config.MotionMagic.MotionMagicCruiseVelocity = ClimbConstants.maxVelocity.in(RadiansPerSecond);
+        config.MotionMagic.MotionMagicAcceleration =
+                ClimbConstants.maxAcceleration.in(RadiansPerSecondPerSecond);
+        config.MotionMagic.MotionMagicCruiseVelocity =
+                ClimbConstants.maxVelocity.in(RadiansPerSecond);
 
         motor.getConfigurator().apply(config);
     }
@@ -47,10 +48,14 @@ public class ClimbReal extends Climb {
     @Override
     public void periodic() {
         Slot0Configs pidConfig = new Slot0Configs();
-        if (TurboLogger.hasChanged("Climb_kP")) pidConfig.kP = TurboLogger.get("Climb_kP", ClimbConstants.kPDefault);
-        if (TurboLogger.hasChanged("Climb_kI")) pidConfig.kI = TurboLogger.get("Climb_kI", ClimbConstants.kIDefault);
-        if (TurboLogger.hasChanged("Climb_kD")) pidConfig.kD = TurboLogger.get("Climb_kD", ClimbConstants.kDDefault);
-        if (pidConfig.serialize().equals(new Slot0Configs().serialize())) motor.getConfigurator().apply(pidConfig);
+        if (TurboLogger.hasChanged("Climb_kP"))
+            pidConfig.kP = TurboLogger.get("Climb_kP", ClimbConstants.kPDefault);
+        if (TurboLogger.hasChanged("Climb_kI"))
+            pidConfig.kI = TurboLogger.get("Climb_kI", ClimbConstants.kIDefault);
+        if (TurboLogger.hasChanged("Climb_kD"))
+            pidConfig.kD = TurboLogger.get("Climb_kD", ClimbConstants.kDDefault);
+        if (pidConfig.serialize().equals(new Slot0Configs().serialize()))
+            motor.getConfigurator().apply(pidConfig);
 
         TurboLogger.log("/Climb/Acceleration", getAcceleration().in(RadiansPerSecondPerSecond));
         TurboLogger.log("/Climb/Current", getCurrent().in(Amps));
@@ -77,7 +82,8 @@ public class ClimbReal extends Climb {
         TurboLogger.log("/Climb/Percent/Setpoint", percent);
 
         // Stopping the motor if at the max or min angles.
-        if (getPosition().gte(ClimbConstants.maxAngle) || getPosition().lte(ClimbConstants.minAngle)) percent = 0;
+        if (getPosition().gte(ClimbConstants.maxAngle)
+                || getPosition().lte(ClimbConstants.minAngle)) percent = 0;
 
         motor.setControl(percentControl.withOutput(percent));
     }
@@ -87,7 +93,8 @@ public class ClimbReal extends Climb {
         TurboLogger.log("/Climb/Voltage/Setpoint", voltage.in(Volts));
 
         // Stopping the motor if at the max or min angles.
-        if (getPosition().gte(ClimbConstants.maxAngle) || getPosition().lte(ClimbConstants.minAngle)) voltage = Volts.zero();
+        if (getPosition().gte(ClimbConstants.maxAngle)
+                || getPosition().lte(ClimbConstants.minAngle)) voltage = Volts.zero();
 
         motor.setControl(voltageControl.withOutput(voltage));
     }

@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.climb;
 
 import static edu.wpi.first.units.Units.*;
@@ -24,27 +23,32 @@ public class ClimbSim extends Climb {
     private boolean closedLoop = false;
 
     public ClimbSim() {
-        motor = new DCMotorSim(
-                LinearSystemId.createDCMotorSystem(
-                        DCMotor.getNEO(1),
-                        ClimbConstants.moi.magnitude(),
-                        ClimbConstants.gearRatio),
-                DCMotor.getNEO(1));
+        motor =
+                new DCMotorSim(
+                        LinearSystemId.createDCMotorSystem(
+                                DCMotor.getNEO(1),
+                                ClimbConstants.moi.magnitude(),
+                                ClimbConstants.gearRatio),
+                        DCMotor.getNEO(1));
 
-        controller = new ProfiledPIDController(
-            TurboLogger.get("Climb_kP", ClimbConstants.kPDefault),
-            TurboLogger.get("Climb_kI", ClimbConstants.kIDefault),
-            TurboLogger.get("Climb_kD", ClimbConstants.kDDefault),
-            new TrapezoidProfile.Constraints(
-                ClimbConstants.maxVelocity.in(RadiansPerSecond),
-                ClimbConstants.maxAcceleration.in(RadiansPerSecondPerSecond)));
+        controller =
+                new ProfiledPIDController(
+                        TurboLogger.get("Climb_kP", ClimbConstants.kPDefault),
+                        TurboLogger.get("Climb_kI", ClimbConstants.kIDefault),
+                        TurboLogger.get("Climb_kD", ClimbConstants.kDDefault),
+                        new TrapezoidProfile.Constraints(
+                                ClimbConstants.maxVelocity.in(RadiansPerSecond),
+                                ClimbConstants.maxAcceleration.in(RadiansPerSecondPerSecond)));
     }
 
     @Override
     public void periodic() {
-        if (TurboLogger.hasChanged("Climb_kP")) controller.setP(TurboLogger.get("Climb_kP", ClimbConstants.kPDefault));
-        if (TurboLogger.hasChanged("Climb_kI")) controller.setI(TurboLogger.get("Climb_kI", ClimbConstants.kIDefault));
-        if (TurboLogger.hasChanged("Climb_kD")) controller.setD(TurboLogger.get("Climb_kD", ClimbConstants.kDDefault));
+        if (TurboLogger.hasChanged("Climb_kP"))
+            controller.setP(TurboLogger.get("Climb_kP", ClimbConstants.kPDefault));
+        if (TurboLogger.hasChanged("Climb_kI"))
+            controller.setI(TurboLogger.get("Climb_kI", ClimbConstants.kIDefault));
+        if (TurboLogger.hasChanged("Climb_kD"))
+            controller.setD(TurboLogger.get("Climb_kD", ClimbConstants.kDDefault));
 
         if (closedLoop) motor.setInputVoltage(controller.calculate(motor.getAngularPositionRad()));
 
@@ -67,7 +71,6 @@ public class ClimbSim extends Climb {
         if (getPosition().gt(ClimbConstants.maxAngle)) angle = ClimbConstants.maxAngle;
         if (getPosition().lt(ClimbConstants.minAngle)) angle = ClimbConstants.minAngle;
 
-
         closedLoop = true;
 
         controller.setGoal(angle.in(Radians));
@@ -78,7 +81,8 @@ public class ClimbSim extends Climb {
         TurboLogger.log("/Climb/Percent/Setpoint", percent);
 
         // Stopping the motor if at the max or min angles.
-        if (getPosition().gte(ClimbConstants.maxAngle) || getPosition().lte(ClimbConstants.minAngle)) percent = 0;
+        if (getPosition().gte(ClimbConstants.maxAngle)
+                || getPosition().lte(ClimbConstants.minAngle)) percent = 0;
 
         closedLoop = false;
 
@@ -90,7 +94,8 @@ public class ClimbSim extends Climb {
         TurboLogger.log("/Climb/Voltage/Setpoint", voltage.in(Volts));
 
         // Stopping the motor if at the max or min angles.
-        if (getPosition().gte(ClimbConstants.maxAngle) || getPosition().lte(ClimbConstants.minAngle)) voltage = Volts.zero();
+        if (getPosition().gte(ClimbConstants.maxAngle)
+                || getPosition().lte(ClimbConstants.minAngle)) voltage = Volts.zero();
 
         closedLoop = false;
 

@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.climb;
 
 import static edu.wpi.first.units.Units.*;

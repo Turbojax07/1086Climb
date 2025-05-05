@@ -1,12 +1,11 @@
-
 package frc.robot.subsystems.climb.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbConstants;
-import frc.robot.util.TurboLogger;
 import frc.robot.util.MathUtils;
+import frc.robot.util.TurboLogger;
 import java.util.function.Supplier;
 
 public class SetClimbPercent extends Command {
@@ -14,8 +13,8 @@ public class SetClimbPercent extends Command {
     private Supplier<Double> throttle;
 
     /**
-     * Creates a new {@link SetClimbPercent} command.
-     * It sets the percent output of the climb system.
+     * Creates a new {@link SetClimbPercent} command. It sets the percent output of the climb
+     * system.
      *
      * @param climb The {@link Climb} system to control.
      * @param throttle The percent output to run at.

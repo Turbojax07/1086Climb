@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.climb;
 
 import static edu.wpi.first.units.Units.*;
@@ -15,7 +14,9 @@ public class Climb extends SubsystemBase {
     protected Climb() {}
 
     public void setAngle(Angle angle) {}
+
     public void setPercent(double percent) {}
+
     public void setVoltage(Voltage voltage) {}
 
     public AngularAcceleration getAcceleration() {

@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems.climb.commands;
 
 import edu.wpi.first.units.measure.Angle;
@@ -10,8 +9,7 @@ public class SetClimbAngle extends Command {
     private Angle angle;
 
     /**
-     * Creates a new {@link SetClimbAngle} command.
-     * It adjusts the setpoint for the climb system.
+     * Creates a new {@link SetClimbAngle} command. It adjusts the setpoint for the climb system.
      *
      * @param climb The {@link Climb} subsystem to control.
      * @param angle The {@link Angle} to go to.
