@@ -48,14 +48,10 @@ public class ClimbReal extends Climb {
     @Override
     public void periodic() {
         Slot0Configs pidConfig = new Slot0Configs();
-        if (TurboLogger.hasChanged("Climb_kP"))
-            pidConfig.kP = TurboLogger.get("Climb_kP", ClimbConstants.kPDefault);
-        if (TurboLogger.hasChanged("Climb_kI"))
-            pidConfig.kI = TurboLogger.get("Climb_kI", ClimbConstants.kIDefault);
-        if (TurboLogger.hasChanged("Climb_kD"))
-            pidConfig.kD = TurboLogger.get("Climb_kD", ClimbConstants.kDDefault);
-        if (pidConfig.serialize().equals(new Slot0Configs().serialize()))
-            motor.getConfigurator().apply(pidConfig);
+        if (TurboLogger.hasChanged("Climb_kP")) pidConfig.kP = TurboLogger.get("Climb_kP", ClimbConstants.kPDefault);
+        if (TurboLogger.hasChanged("Climb_kI")) pidConfig.kI = TurboLogger.get("Climb_kI", ClimbConstants.kIDefault);
+        if (TurboLogger.hasChanged("Climb_kD")) pidConfig.kD = TurboLogger.get("Climb_kD", ClimbConstants.kDDefault);
+        if (pidConfig.serialize().equals(new Slot0Configs().serialize())) motor.getConfigurator().apply(pidConfig);
 
         TurboLogger.log("/Climb/Acceleration", getAcceleration().in(RadiansPerSecondPerSecond));
         TurboLogger.log("/Climb/Current", getCurrent().in(Amps));

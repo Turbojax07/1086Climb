@@ -14,6 +14,7 @@ import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.util.TurboLogger;
+import frc.robot.util.TurboLogger2;
 
 public class ClimbSim extends Climb {
     private DCMotorSim motor;
@@ -23,19 +24,17 @@ public class ClimbSim extends Climb {
     private boolean closedLoop = false;
 
     public ClimbSim() {
-        motor =
-                new DCMotorSim(
-                        LinearSystemId.createDCMotorSystem(
-                                DCMotor.getNEO(1),
-                                ClimbConstants.moi.magnitude(),
-                                ClimbConstants.gearRatio),
-                        DCMotor.getNEO(1));
+        motor = new DCMotorSim(
+                LinearSystemId.createDCMotorSystem(
+                        DCMotor.getNEO(1),
+                        ClimbConstants.moi.magnitude(),
+                        ClimbConstants.gearRatio),
+                DCMotor.getNEO(1));
 
-        controller =
-                new ProfiledPIDController(
-                        TurboLogger.get("Climb_kP", ClimbConstants.kPDefault),
-                        TurboLogger.get("Climb_kI", ClimbConstants.kIDefault),
-                        TurboLogger.get("Climb_kD", ClimbConstants.kDDefault),
+        controller = new ProfiledPIDController(
+                        TurboLogger2.getDouble("Climb_kP"),
+                        TurboLogger2.getDouble("Climb_kI"),
+                        TurboLogger2.getDouble("Climb_kD"),
                         new TrapezoidProfile.Constraints(
                                 ClimbConstants.maxVelocity.in(RadiansPerSecond),
                                 ClimbConstants.maxAcceleration.in(RadiansPerSecondPerSecond)));
@@ -43,24 +42,21 @@ public class ClimbSim extends Climb {
 
     @Override
     public void periodic() {
-        if (TurboLogger.hasChanged("Climb_kP"))
-            controller.setP(TurboLogger.get("Climb_kP", ClimbConstants.kPDefault));
-        if (TurboLogger.hasChanged("Climb_kI"))
-            controller.setI(TurboLogger.get("Climb_kI", ClimbConstants.kIDefault));
-        if (TurboLogger.hasChanged("Climb_kD"))
-            controller.setD(TurboLogger.get("Climb_kD", ClimbConstants.kDDefault));
+        if (TurboLogger2.hasChanged("Climb_kP")) controller.setP(TurboLogger2.getDouble("Climb_kP"));
+        if (TurboLogger2.hasChanged("Climb_kI")) controller.setI(TurboLogger2.getDouble("Climb_kI"));
+        if (TurboLogger2.hasChanged("Climb_kD")) controller.setD(TurboLogger2.getDouble("Climb_kD"));
 
         if (closedLoop) motor.setInputVoltage(controller.calculate(motor.getAngularPositionRad()));
 
         motor.update(0.02);
 
-        TurboLogger.log("/Climb/Acceleration", getAcceleration().in(RadiansPerSecondPerSecond));
-        TurboLogger.log("/Climb/Current", getCurrent().in(Amps));
-        TurboLogger.log("/Climb/Percent/Actual", getPercent());
-        TurboLogger.log("/Climb/Position/Actual", getPosition().in(Radians));
-        TurboLogger.log("/Climb/Temperature", getTemperature().in(Celsius));
-        TurboLogger.log("/Climb/Velocity", getVelocity().in(RadiansPerSecond));
-        TurboLogger.log("/Climb/Voltage/Actual", getVoltage().in(Volts));
+        TurboLogger2.log("/Climb/Acceleration", getAcceleration().in(RadiansPerSecondPerSecond));
+        TurboLogger2.log("/Climb/Current", getCurrent().in(Amps));
+        TurboLogger2.log("/Climb/Percent/Actual", getPercent());
+        TurboLogger2.log("/Climb/Position/Actual", getPosition().in(Radians));
+        TurboLogger2.log("/Climb/Temperature", getTemperature().in(Celsius));
+        TurboLogger2.log("/Climb/Velocity", getVelocity().in(RadiansPerSecond));
+        TurboLogger2.log("/Climb/Voltage/Actual", getVoltage().in(Volts));
     }
 
     @Override

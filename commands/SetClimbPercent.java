@@ -13,8 +13,8 @@ public class SetClimbPercent extends Command {
     private Supplier<Double> throttle;
 
     /**
-     * Creates a new {@link SetClimbPercent} command. It sets the percent output of the climb
-     * system.
+     * Creates a new {@link SetClimbPercent} command.
+     * It sets the percent output of the climb system.
      *
      * @param climb The {@link Climb} system to control.
      * @param throttle The percent output to run at.
